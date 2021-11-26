@@ -1,0 +1,15 @@
+[package]
+name = "burstmeter-windwaker"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+dolphin-memory = "0.2.2"
+windwaker = "0.1.0"
+crossterm = "0.22"
+anyhow = "1"
+
+[build-dependencies]
+winres = "0.1"
+cc = "1.0"
