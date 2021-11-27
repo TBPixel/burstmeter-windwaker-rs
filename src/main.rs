@@ -50,11 +50,16 @@ fn main() -> anyhow::Result<()> {
         let input = windwaker::input::Inputs::default()
             .read(&dolphin)
             .unwrap_or_default();
+        let mut mp = windwaker::player::Mp::default()
+            .read(&dolphin)
+            .unwrap_or_default();
 
-        let can_burst = Instant::now().duration_since(last_burst).as_millis() > 300;
+        let can_burst =
+            mp.current >= 2 && Instant::now().duration_since(last_burst).as_millis() > 200;
 
         if input.dpad_left_just_pressed && can_burst {
             last_burst = Instant::now();
+            mp.write_current(mp.current - 2, &dolphin)?;
             windwaker::player::Speed::default().write(1600.0, &dolphin)?;
         }
 
