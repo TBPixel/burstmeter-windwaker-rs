@@ -49,12 +49,13 @@ checksum = "8f1e260c3a9040a7c19a12468758f4c16f31a81a1fe087482be9570ec864bb6c"
 
 [[package]]
 name = "burstmeter-windwaker"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "anyhow",
  "crossterm",
  "dolphin-memory",
  "self_update",
+ "thiserror",
  "windwaker",
 ]
 
@@ -140,9 +141,7 @@ dependencies = [
 
 [[package]]
 name = "dolphin-memory"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea44436aea15ebdb3ae4ad0711edbe2e2eef77e3a7367f400356c7823a41098f"
+version = "0.2.3"
 dependencies = [
  "byteorder",
  "process-memory",

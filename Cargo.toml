@@ -1,11 +1,12 @@
 [package]
 name = "burstmeter-windwaker"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 
 [dependencies]
-dolphin-memory = "0.2.2"
+dolphin-memory = { path = "../dolphin-memory" }
 windwaker = { path = "../windwaker" }
 crossterm = "0.22"
 anyhow = "1"
+thiserror = "1"
 self_update = "0.27.0"
