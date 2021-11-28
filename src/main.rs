@@ -1,19 +1,21 @@
 #[macro_use]
 extern crate crossterm;
 
+use anyhow::anyhow;
 use crossterm::cursor;
 use crossterm::event::{poll, read, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::style::Print;
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType};
 use dolphin_memory::Dolphin;
-use std::io::stdout;
+use self_update::cargo_crate_version;
 
+use std::io::stdout;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use anyhow::anyhow;
-
 fn main() -> anyhow::Result<()> {
+    update()?;
+
     println!("Waiting for Wind Waker to start...");
     let dolphin = loop {
         if let Ok(p) = dolphin_memory::Dolphin::new() {
@@ -58,7 +60,7 @@ fn main() -> anyhow::Result<()> {
         let can_burst =
             mp.current >= 2 && Instant::now().duration_since(last_burst).as_millis() > 200;
 
-        if input.dpad_left_just_pressed && can_burst {
+        if input.dpad_left_hold && can_burst {
             if let Ok(_) = charge_magic_cost(&mut mp, 2, &dolphin) {
                 burst(1600.0, &dolphin);
             }
@@ -108,4 +110,17 @@ fn burst(amount: f32, d: &Dolphin) {
     if let Err(_) = windwaker::player::Speed::default().write(amount, d) {
         return burst(amount, d);
     }
+}
+
+fn update() -> anyhow::Result<()> {
+    let status = self_update::backends::github::Update::configure()
+        .repo_owner("TBPixel")
+        .repo_name("burstmeter-windwaker-rs")
+        .bin_name("github")
+        .show_download_progress(true)
+        .current_version(cargo_crate_version!())
+        .build()?
+        .update()?;
+    println!("Update status: `{}`!", status.version());
+    Ok(())
 }
